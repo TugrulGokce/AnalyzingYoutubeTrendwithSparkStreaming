@@ -79,8 +79,6 @@ val mostviewedcategoryDf = youTubeSchemaDf
 		.agg(sum("view_count").as("total_view_count_by_category"))
 		.sort($"total_view_count_by_category".desc)
 
-import org.apache.spark.sql.streaming.Trigger.ProcessingTime
-
 val mostviewedcategoryDfQuery = mostviewedcategoryDf
 		.selectExpr("CAST(trending_date as STRING)","CAST(category_title AS STRING)", "CAST(total_view_count_by_category AS INTEGER)", "to_json(struct(*)) AS value")
 		.writeStream.format("kafka")
@@ -98,8 +96,6 @@ val mostlikedchannelDf = youTubeSchemaDf
 		.agg(sum("likes").as("total_likes_count_by_channel"))
 		.sort($"total_likes_count_by_channel".desc)
 
-import org.apache.spark.sql.streaming.Trigger.ProcessingTime
-
 val mostlikedchannelDfDfQuery = mostlikedchannelDf
 		.selectExpr("CAST(trending_date as STRING)","CAST(channel_title AS STRING)", "CAST(total_likes_count_by_channel AS INTEGER)", "to_json(struct(*)) AS value")
 		.writeStream.format("kafka")
@@ -115,8 +111,6 @@ val mostlikedcategoryDf = youTubeSchemaDf
 		.groupBy("trending_date","category_title")
 		.agg(sum("likes").as("total_likes_count_by_category"))
 		.sort($"total_likes_count_by_category".desc)
-
-import org.apache.spark.sql.streaming.Trigger.ProcessingTime
 
 val mostlikedcategoryDfQuery = mostlikedcategoryDf
 		.selectExpr("CAST(trending_date as STRING)","CAST(category_title AS STRING)", "CAST(total_likes_count_by_category AS INTEGER)", "to_json(struct(*)) AS value")
